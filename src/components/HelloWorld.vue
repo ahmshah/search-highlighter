@@ -1,45 +1,3 @@
-<template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;
@@ -54,5 +12,132 @@ li {
 }
 a {
   color: #42b983;
+}
+
+#search-app {
+  max-width: 1024px;
+  width: 100%;
+}
+.card {
+  min-width: 33%;
+}
+.card .hl-search {
+  background-color: yellow;
+}
+@media only screen and (max-width: 786px) {
+  .card {
+    min-width: 50%;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .card {
+    min-width: 100%;
+  }
+}
+</style>
+
+<template>
+  <div class="hello">
+    <h1>{{ msg }}</h1>
+
+    <input type="text" v-model="searchTerm" placeholder="Search for posts..." />
+
+    <div v-for="post in apiData" :key="post.id" class="card">
+      <h3 v-html="highlight(post.title)"></h3>
+      <p v-html="highlight(post.body)"></p>
+    </div>
+  </div>
+</template>
+
+<script>
+// Import Vue's Composition API functions
+import { ref } from 'vue';
+
+export default {
+  name: 'HelloWorld',
+  props: {
+    msg: String,
+  },
+  setup() {
+    // Reactive references using Vue's Composition API
+    const searchTerm = ref('');
+    const apiData = ref([
+      {
+        id: 1,
+        title: 'Rich Text Improvements',
+        body: 'The heart of content creation in Apostrophe has always been our rich text editor...',
+      },
+      {
+        id: 2,
+        title: 'Rich Text Improvements',
+        body: 'The heart of content creation in Apostrophe has always been our rich text editor...',
+      },
+      {
+        id: 3,
+        title: 'Rich Text Improvements',
+        body: 'The heart of content creation in Apostrophe has always been our rich text editor...',
+      },
+      {
+        id: 4,
+        title: 'Rich Text Improvements',
+        body: 'The heart of content creation in Apostrophe has always been our rich text editor...',
+      },
+    ]);
+
+    // Method to highlight the search term in the post content
+    const highlight = (data) => {
+      if (searchTerm.value) {
+        const pattern = new RegExp(searchTerm.value, 'gi'); // Case-insensitive and global search
+
+        return data.replace(pattern, (match) => {
+          return `<span style="background-color: yellow;">${match}</span>`; // Wrap matching text in <span>
+        });
+      }
+      return data; // Return the text as is if no search term
+    };
+
+    // Returning the reactive state and methods to the template
+    return {
+      searchTerm,
+      apiData,
+      highlight,
+    };
+  },
+};
+</script>
+
+<style scoped>
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+
+#search-app {
+  max-width: 1024px;
+  width: 100%;
+}
+.card {
+  min-width: 33%;
+}
+ .hl-search {
+  background-color: yellow;
+}
+@media only screen and (max-width: 786px) {
+  .card {
+    min-width: 50%;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .card {
+    min-width: 100%;
+  }
 }
 </style>
